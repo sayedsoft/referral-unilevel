@@ -1,14 +1,12 @@
 <?php
+namespace Sayedsoft\ReferralUnilevel\Jobs;
 
-namespace App\Jobs;
-
-use App\Jobs\TelegramJob;
-use App\Models\Referral\ReferralSponsor;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Sayedsoft\ReferralUnilevel\Models\Referral\ReferralSponsor;
 
 class NewChildJob implements ShouldQueue 
 {
@@ -35,7 +33,16 @@ class NewChildJob implements ShouldQueue
     public function handle()
     {
         $newUser  = $this->user->user;
-        
+        $sponsors = $newUser->referral->sponsors;
 
+        foreach($sponsors as $level => $sponsor) {
+            $sponsor->team_count += 1;
+            $sponsor->save();
+            ReferralSponsor::create([
+                'user_id'    => $newUser->id,
+                'sponsor_id' => $sponsor->user->id,
+                'level' => $level
+            ]);
+        }
     }
 }
