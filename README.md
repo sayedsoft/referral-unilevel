@@ -11,7 +11,7 @@ Add referral system to user user table
 You can install the package via composer:
 
 ```bash
-composer require sayedsoft/referral-unilevel
+composer require sayedsoft/referral-unilevel:dev-main
 ```
 
 ## Usage
@@ -20,20 +20,19 @@ composer require sayedsoft/referral-unilevel
 php artisan migrate
 ```
 
-
-
 ## To use it add code to your user model
 
 ```php
 use Sayedsoft\ReferralUnilevel\Traits\Referral\UserReferral;
 
 
-class User extends Authenticatable 
+class User extends Authenticatable
 {
     use  UserReferral .... ;
 ```
 
-## To set spondor any user 
+## To set spondor any user
+
 ```php
 $sonpor_ref_code = 'ADMIN';
 $user = User::find(1);
