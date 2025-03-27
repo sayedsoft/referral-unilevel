@@ -22,7 +22,7 @@
   "prefer-stable": false,
   "require": {
     "php": "^8.2",
-    "laravel/framework": "^10.10"
+    "laravel/framework": ">=9.0"
   },
   "require-dev": {
     "orchestra/testbench": "^6.0",
