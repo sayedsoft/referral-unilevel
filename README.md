@@ -11,7 +11,7 @@ Add referral system to user user table
 You can install the package via composer:
 
 ```bash
-composer require sayedsoft/referral-unilevel:dev-main
+composer require sayedsoft/referral-unilevel
 ```
 
 ## Usage
