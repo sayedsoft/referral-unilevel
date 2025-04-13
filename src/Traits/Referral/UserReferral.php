@@ -21,9 +21,23 @@ trait UserReferral
         return $this->belongsTo(Referral::class, 'id', 'user_id');
     }
 
-    private function setSponsor()
+
+    private function _getUserSponsors($user_id, $team, $level)
     {
-        $sponsors = $this->referral->sponsors;
+        $sponsor = Referral::whereUserId($user_id)->with('user')->first() ?? null;
+        $level = $level + 1;
+        if (isset($sponsor->user_id) && $sponsor != null && $sponsor->user_id != 1) {
+            $team[$level] = $sponsor;
+        } else {
+            return $team;
+        }
+
+        return $this->_getUserSponsors($sponsor->referral_id, $team, $level, '');
+    }
+
+    private function setSponsor($referralId)
+    {
+        $sponsors = $this->_getUserSponsors($referralId, [], 0);
 
         foreach ($sponsors as $level => $sponsor) {
             $sponsor->team_count += 1;
@@ -46,13 +60,15 @@ trait UserReferral
             throw (new Exception('User has Referral already'));
         }
 
+        $referral = Referral::where('referral_code', $referral_code)->first();
+
         Referral::create([
             'user_id' => $this->id,
-            'referral_id' => Referral::where('referral_code', $referral_code)->first()->user_id,
+            'referral_id' => $referral->user_id,
             'referral_code' => ReferralCode::generateCode(),
         ]);
 
-        $this->setSponsor();
+        $this->setSponsor($referral);
 
     }
 
