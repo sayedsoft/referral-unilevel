@@ -19,19 +19,21 @@ class Referral extends Migration
             // define foreign key
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')
-                  ->references('id')->on('users')
-                  ->onDelete('cascade');
+                ->references('id')->on('users')
+                ->onDelete('cascade');
             $table->unsignedBigInteger('referral_id');
             $table->foreign('referral_id')
-                  ->references('id')->on('users');
+                ->references('id')->on('users');
             $table->string('referral_code')->default($this->randString(5));
             $table->unsignedBigInteger('team_count')->default(0);
+            $table->boolean('is_first')->default(false);
             $table->timestamps();
         });
     }
 
-     // just a random string generator
-    public function randString($length){
+    // just a random string generator
+    public function randString($length)
+    {
         $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
         $randomString = '';
